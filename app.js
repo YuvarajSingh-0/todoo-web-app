@@ -76,6 +76,12 @@ app.post("/login", async (req, res) => {
 app.post("/addtask", async (req, res) => {
   newtask = req.body.task;
   var userData = await users.find({ username: req.body.name });
+  if(!req.body.task){
+    return res.render("../public/todo.ejs", {
+      values: userData[0].todos,
+      name: userData[0].username,
+    });  
+  }
   var newtodos=userData[0].todos
   newtodos.push(newtask)
   await users.updateOne({username:req.body.name},{$set:{todos:newtodos}})
