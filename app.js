@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 
-mongoose.connect(process.env.MONGODB_URL, {
+mongoose.connect("mongodb+srv://yuvarajsingh:Bobbyuvi@cluster-0.jy9ky.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
