@@ -1,36 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/output.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet"> -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <title>Login</title>
-  </head>
-  <body class="grid md:grid-cols-2 grid-cols-1" style="font-family: 'Dancing Script', cursive;">
-    <div class="flex items-center justify-center h-screen bg-auto" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)); background-image: url('./img/todo-login-bg.jpg')" >
-      
-      <form action="/login"  class=" flex flex-col justify-center shadow-2xl gap-10 items-center text-2xl  bg-[#745948] border-2 rounded-lg p-4" method="post">
-        <div class="m-2">
-          <div for="username">Username: </div>
-          <input type="text" name="username" class="m-1 p-1 shadow-xl rounded-md" placeholder="Enter Username" />
-          <h4 class="text-yellow-500"><small><%=msg%></small></h4>
-        </div>
-        <div class="m-2">
-          <div for="password">Password: </div>
-          <input type="password" name="password" class="m-1 p-1 shadow-xl rounded-md" placeholder="Enter Password"/>
-        </div>
-        <button class="bg-yellow-500 w-20 font-bold rounded-sm" type="submit">Login</button>
-      </form>
-    </div>
-    <div>
-      <img src="./img/todo-login-bg.jpg" class="hidden h-screen md:block" alt="login poster">
-    </div>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./css/output.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+  <title>Login</title>
+</head>
+
+<body class="grid md:grid-cols-2 grid-cols-1" style="font-family: 'Dancing Script', cursive">
+  <div class="flex items-center justify-center h-screen bg-auto" style="
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+        background-image: url('./img/todo-login-bg.jpg');
+      ">
+    <form action="/login"
+      class="flex flex-col justify-center shadow-2xl gap-10 items-center text-2xl bg-[#745948] border-2 rounded-lg p-4"
+      method="post">
+      <div class="m-2">
+        <div for="username">Username:</div>
+        <input type="text" name="username" class="m-1 p-1 shadow-xl rounded-md" placeholder="Enter Username" />
+        <h4 class="text-yellow-500"><small>
+            <%=msg%>
+          </small></h4>
+      </div>
+      <div class="m-2">
+        <div for="password">Password:</div>
+        <input type="password" name="password" class="m-1 p-1 shadow-xl rounded-md" placeholder="Enter Password" />
+      </div>
+      <button class="bg-yellow-500 w-20 font-bold rounded-sm" type="submit">
+        Login
+      </button>
+    </form>
+  </div>
+  <div>
+    <img src="./img/todo-login-bg.jpg" class="hidden h-screen md:block" alt="login poster" />
+  </div>
+</body>
+
 </html>
