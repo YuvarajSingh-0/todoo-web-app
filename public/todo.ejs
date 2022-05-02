@@ -45,11 +45,11 @@
 
 <body class="  bg-cover bg-no-repeat" style="font-family: 'Dancing Script', cursive; background-image: url(./img/todo-bg.webp);">
     <div class="flex flex-col items-center justify-center gap-5">
-        <div class="">
+        <div>
             <h1 class="text-5xl m-4">To-Do <small>List</small></h1>
             <form action="/addtask" method="post" role="form">
                 <input class="border-2 rounded-md shadow-inner" type="text" class="form-control" placeholder="Your Task" name="task">
-                    <button type="submit" class="border-2 border-slate-900 px-2 rounded-md">Add</button>
+                    <button type="submit" class="border-2 border-slate-900 px-2 rounded-md hover:scale-110">Add</button>
                 <input type="text" class="form-control" name="name" value="<%=name%>" style="display:none;">
             </form>
         </div>
@@ -62,8 +62,11 @@
                 <input type="text" class="form-control" name="value" value="<%=value%>" style="display:none;">
                     <button name="name" value="<%=name%>" type="submit" class="cursor-pointer text-2xl hover:scale-110">Done</button>
                 </form>
-                <%})%>
+            <%})%>
         </div>
+        <form action="/logout" method="post">
+            <button type="submit" class="cursor-pointer text-2xl hover:scale-110">Logout</button>
+        </form>
     </div>
 </body>
 

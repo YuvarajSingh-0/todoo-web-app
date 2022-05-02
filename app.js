@@ -134,6 +134,11 @@ app.post("/deletetask", async (req,res)=>{
 })
 
 
+app.post("/logout",(req,res)=>{
+  req.session.destroy();
+  res.redirect("/login");
+})
+
 let port = process.env.PORT;
 
 if (port == null || port == "") {
@@ -141,6 +146,5 @@ if (port == null || port == "") {
 }
 
 app.listen(port, async () => {
-  console.log(process.env.TEST);
   console.log("Server started");
 });
