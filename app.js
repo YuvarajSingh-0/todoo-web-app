@@ -4,23 +4,23 @@ const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoDBSession=require('connect-mongodb-session')(session);
 
-mongoose.connect("mongodb+srv://yuvarajsingh:Bobbyuvi@cluster-0.jy9ky.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
+
+const mongoURI=""+process.env.MONGO_URI;
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+}).catch(e => console.log(e));
+
+
+const store=new MongoDBSession({
+  uri:mongoURI,
+  collection: "currentSessions"
 });
 
-const todoSchema = new mongoose.Schema({
-  username: {
-    type:String,
-    lowercase: true,
-    index:true
-  },
-  password: String,
-  todos: [],
-});
 
-const users = new mongoose.model("users", todoSchema);
 
 app.set("view-engine", "ejs");
 
@@ -31,6 +31,25 @@ app.use(
 );
 app.use(express.static("./public"));
 
+app.use(session({
+  secret:"secret",
+  resave:false,
+  saveUninitialized:false,
+  store:store,
+}))
+
+const todoSchema = new mongoose.Schema({
+  username: {
+    type:String,
+    index:true
+  },
+  password: String,
+  todos: [],
+});
+const users = new mongoose.model("users", todoSchema);
+
+
+
 app.get("/", (req,res)=>{
   res.redirect("/login")
 })
@@ -39,12 +58,16 @@ app.get("/login", (req, res) => {
   res.render("../public/login.ejs", { msg: "" });
 });
 
-app.get("/deletetask",(req,res)=>{
-  res.redirect("/login");
-})
+app.get("/todos", async (req,res)=>{
+  console.log(req.session.usern);
+  const user= await users.findOne({username:req.session.usern});
+  if(req.session.isAuth){
+    res.render("../public/todo.ejs", {values:user.todos,name:user.username});
+  }
+  else{
+    res.redirect("/login");
+  }
 
-app.get("/addtask",(req,res)=>{
-  res.redirect("/login");
 })
 
 app.post("/login", async (req, res) => {
@@ -58,15 +81,17 @@ app.post("/login", async (req, res) => {
       todos: [],
     });
     user.save();
+    req.session.usern=user.username;
+    req.session.isAuth=true;
+    res.redirect("/todos");
     res.render("../public/todo.ejs", { values: [], name: user.username });
   } else if (
     (userData[0].username == req.body.username) &&
     (await bcrypt.compare(req.body.password, userData[0].password))
   ) {
-    res.render("../public/todo.ejs", {
-      values: userData[0].todos,
-      name: userData[0].username,
-    });
+    req.session.usern=userData[0].username;
+    req.session.isAuth=true;
+    res.redirect("/todos");
   } else {
     res.render("../public/login.ejs", { msg: "Username already exists" });
   }
@@ -74,21 +99,25 @@ app.post("/login", async (req, res) => {
 
 
 app.post("/addtask", async (req, res) => {
+  if(!req.body.task){
+    // return res.render("../public/todo.ejs", {
+    //   values: userData[0].todos,
+    //   name: userData[0].username,
+    // });  
+    res.redirect("/todos");
+  }
   newtask = req.body.task;
   var userData = await users.find({ username: req.body.name });
-  if(!req.body.task){
-    return res.render("../public/todo.ejs", {
-      values: userData[0].todos,
-      name: userData[0].username,
-    });  
-  }
   var newtodos=userData[0].todos
-  newtodos.push(newtask)
+  if(newtodos.indexOf(newtask)==-1){
+    newtodos.push(newtask)
+  }
   await users.updateOne({username:req.body.name},{$set:{todos:newtodos}})
-  res.render("../public/todo.ejs", {
-    values: userData[0].todos,
-    name: userData[0].username,
-  });
+  // res.render("../public/todo.ejs", {
+  //   values: userData[0].todos,
+  //   name: userData[0].username,
+//   });
+res.redirect("/todos");
 });
 
 
@@ -99,7 +128,8 @@ app.post("/deletetask", async (req,res)=>{
   old_todos=user.todos;
   var updated_todos=old_todos.filter( todo =>{ return todo!=req.body.value})
   await users.updateOne({username:req.body.name}, {$set:{todos:updated_todos}})
-  res.render('../public/todo.ejs',{name:user.username,values:updated_todos})
+  // res.render('../public/todo.ejs',{name:user.username,values:updated_todos})
+  res.redirect("/todos");
 })
 
 
@@ -110,5 +140,5 @@ if (port == null || port == "") {
 }
 
 app.listen(port, async () => {
-  console.log("Server is runnning at : localhost:"+port+"/");
+  console.log("Server started");
 });
