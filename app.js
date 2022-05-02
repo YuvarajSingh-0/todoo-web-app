@@ -1,6 +1,7 @@
 const express = require("express");
 const ejs = require("ejs");
 const app = express();
+require('dotenv').config()
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
@@ -8,7 +9,7 @@ const session = require("express-session");
 const MongoDBSession=require('connect-mongodb-session')(session);
 
 
-const mongoURI=""+process.env.MONGO_URI;
+const mongoURI=process.env.MONGODB_URI;
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -140,5 +141,6 @@ if (port == null || port == "") {
 }
 
 app.listen(port, async () => {
+  console.log(process.env.TEST);
   console.log("Server started");
 });
