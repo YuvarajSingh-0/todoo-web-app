@@ -73,7 +73,7 @@ app.get("/todos", async (req, res) => {
 app.post("/login", async (req, res) => {
   var userData = await users.findOne({ username: req.body.username });
 
-  if (userData) {
+  if (!userData) {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     var user = new users({
       username: req.body.username,
@@ -83,14 +83,14 @@ app.post("/login", async (req, res) => {
     user.save();
     req.session.usern = user.username;
     req.session.isAuth = true;
-    res.redirect("/todos");
+    return res.redirect("/todos");
   } else if (
     userData.username == req.body.username &&
     (await bcrypt.compare(req.body.password, userData.password))
   ) {
     req.session.usern = userData.username;
     req.session.isAuth = true;
-    res.redirect("/todos");
+    return res.redirect("/todos");
   } else {
     res.render("../public/login.ejs", { msg: "Username already exists" });
   }
