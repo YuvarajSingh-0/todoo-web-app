@@ -100,16 +100,18 @@ app.post("/addtask", async (req, res) => {
   if (!req.body.task) {
     return res.redirect("/todos");
   }
-  newtask = req.body.task;
-  var userData = await users.findOne({ username: req.body.name });
-  var newtodos = userData.todos;
-  if (newtodos.indexOf(newtask) == -1) {
-    newtodos.push(newtask);
+  if (req.session.isAuth) {
+    newtask = req.body.task;
+    var userData = await users.findOne({ username: req.body.name });
+    var newtodos = userData.todos;
+    if (newtodos.indexOf(newtask) == -1) {
+      newtodos.push(newtask);
+    }
+    await users.updateOne(
+      { username: req.body.name },
+      { $set: { todos: newtodos } }
+    );
   }
-  await users.updateOne(
-    { username: req.body.name },
-    { $set: { todos: newtodos } }
-  );
   res.redirect("/todos");
 });
 
