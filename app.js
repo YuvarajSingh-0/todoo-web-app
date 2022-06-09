@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoDBSession = require("connect-mongodb-session")(session);
-const popup =require( 'node-popup');
+const popup = require("node-popup");
 const mongoURI = process.env.MONGODB_URI;
 mongoose
   .connect(mongoURI, {
@@ -114,15 +114,18 @@ app.post("/addtask", async (req, res) => {
 });
 
 app.post("/deletetask", async (req, res) => {
-  let user = await users.findOne({ username: req.body.name });
-  old_todos = user.todos;
-  var updated_todos = old_todos.filter((todo) => {
-    return todo != req.body.value;
-  });
-  await users.updateOne(
-    { username: req.body.name },
-    { $set: { todos: updated_todos } }
-  );
+  if (req.session.isAuth) {
+    let user = await users.findOne({ username: req.body.name });
+    old_todos = user.todos;
+    var updated_todos = old_todos.filter((todo) => {
+      return todo != req.body.value;
+    });
+    await users.updateOne(
+      { username: req.body.name },
+      { $set: { todos: updated_todos } }
+    );
+  }
+
   // res.render('../public/todo.ejs',{name:user.username,values:updated_todos})
   res.redirect("/todos");
 });
