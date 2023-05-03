@@ -2,6 +2,11 @@
 
 This Todo App is based on Authentication by [bcrypt](https://www.npmjs.com/package/bcrypt) module and uses `MongoDB` to store List of Todos.
 
+```diff
+Status:
+- Offline 
+```
+
 ## Usage
 
 Just Login to Todo App by visiting [Todo-App](https://todoo-web-app.herokuapp.com)
